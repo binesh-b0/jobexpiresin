@@ -25,12 +25,12 @@ export const ShimmerButton: React.FC<ShimmerButtonProps> = ({
   });
 
   
-  const randomizeSquareStyles = () => ({
-    x: Math.random() * 40 - 20,
-    y: Math.random() * 40 - 20,
-    rotation: Math.random() * 360 * (Math.random() < 0.5 ? -1 : 1),
-    speed: Math.random() * 6 + 8, 
-  });
+  // const randomizeSquareStyles = () => ({
+  //   x: Math.random() * 40 - 20,
+  //   y: Math.random() * 40 - 20,
+  //   rotation: Math.random() * 360 * (Math.random() < 0.5 ? -1 : 1),
+  //   speed: Math.random() * 6 + 8, 
+  // });
 
   useEffect(() => {
     const randomizeSquareStyles = (constrainedX: number, constrainedY: number) => ({

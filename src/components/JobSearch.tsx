@@ -39,7 +39,7 @@ export default function JobSearch({
     <motion.div
       initial={{ y: 0 }}
       animate={{ y: isLoading ? -30 : 0 }}
-      className="mt-8 flex flex-row max-w-[800px] mx-auto"
+      className="mt-8 flex flex-row "
     >
       <input
         type="text"

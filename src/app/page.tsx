@@ -28,15 +28,13 @@ export default function Home() {
     setResponse(null); // Clear previous response
     
     try {
-      setTimeout(async () => {
-        const res = await fetch(`/api/job?jobTitle=${jobTitle}`);
-        if (!res.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const data: JobResponse = await res.json();
-        setResponse(data);
-      }, 200);
-      
+      // Fetch the job data from the API
+      const res = await fetch(`/api/job?jobTitle=${jobTitle}`);
+      if (!res.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const data: JobResponse = await res.json();
+      setResponse(data);
     } catch (error) {
       // Handle error by setting an error message
       setError("Something went wrong. Please try again.");
@@ -51,7 +49,6 @@ export default function Home() {
         numSquares={10}
         maxOpacity={0.5}
         duration={3}
-        repeatDelay={1}
         width={80}
         height={80}
         className="absolute bottom-5 right-50 skew-y-12 [mask-image:radial-gradient(1200px_circle_at_bottom_right,white,transparent)]"
@@ -90,8 +87,7 @@ export default function Home() {
       {/* Error message */}
       {error && !isLoading && (
         <div className="mt-4 text-red-600">
-          <p>Something wen wrong</p>
-          {error}
+          <p>{error}</p>
         </div>
       )}
 

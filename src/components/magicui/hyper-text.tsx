@@ -33,10 +33,10 @@ export default function HyperText({
   const interations = useRef(0);
   const isFirstRender = useRef(true);
 
-  const triggerAnimation = () => {
-    interations.current = 0;
-    setTrigger(true);
-  };
+  // const triggerAnimation = () => {
+  //   interations.current = 0;
+  //   setTrigger(true);
+  // };
 
   useEffect(() => {
     setDisplayText(text.split(""));

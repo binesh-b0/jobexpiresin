@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
 
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent";
+const GEMINI_API_URL = process.env.GEMINI_API_URL;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const JOB_PROMPT_STRUCTURE = process.env.JOB_PROMPT_STRUCTURE;
+// const JOB_PROMPT_JSON_FORMAT = process.env.JOB_PROMPT_JSON_FORMAT;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -23,7 +25,7 @@ export async function GET(request: Request) {
           {
             parts: [
               {
-                text: `Generate a detailed job description for the job title "${jobTitle}" in JSON format with the following structure:
+                text: `${JOB_PROMPT_STRUCTURE} "${jobTitle}" in JSON format with the following structure:
                 {
                   "title": "string",
                   "similarJobs": ["string", "string", "string"],

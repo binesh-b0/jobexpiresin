@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 
 export default function GitHubButton() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [maskSize, setMaskSize] = useState(0); 
+  const [maskSize, setMaskSize] = useState(0);
   const buttonRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -15,18 +15,18 @@ export default function GitHubButton() {
   };
 
   const handleMouseEnter = () => {
-    setMaskSize(25); 
+    setMaskSize(30);
   };
 
   const handleMouseLeave = () => {
-    setMaskSize(0);
+    setMaskSize(0); 
   };
 
   return (
     <div className="absolute top-4 right-4">
       <div
         ref={buttonRef}
-        className="relative inline-block px-4 py-2 bg-black text-white rounded group overflow-hidden"
+        className="relative inline-block px-3 py-1 md:px-4 md:py-2 bg-black text-white rounded group overflow-hidden"
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -48,7 +48,7 @@ export default function GitHubButton() {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="w-6 h-6"
+            className="w-5 h-5 md:w-6 md:h-6"
           >
             <path
               fillRule="evenodd"
@@ -56,15 +56,15 @@ export default function GitHubButton() {
               clipRule="evenodd"
             />
           </svg>
-          GitHub
+          <span className="text-sm md:text-base">GitHub</span>
         </a>
 
         {/* Mask Circle for hover effect */}
         <div
-          className="absolute inset-0 bg-white pointer-events-none "
+          className="absolute inset-0 bg-white pointer-events-none"
           style={{
             clipPath: `circle(${maskSize}px at var(--maskX) var(--maskY))`,
-            mixBlendMode: "difference", 
+            mixBlendMode: "difference",
           }}
         />
       </div>

@@ -62,7 +62,7 @@ export const ShimmerButton: React.FC<ShimmerButtonProps> = ({
   return (
     <button
       className={`relative flex items-center justify-center rounded-md bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none  ${className} ${
-        disabled ? "opacity-50 cursor-not-allowed" : "animate-shimmer-button"
+        disabled ? "opacity-90 cursor-not-allowed" : "animate-shimmer-button"
       }`}
       style={{
         animationDuration: disabled ? "0s" : animationDuration,
@@ -75,7 +75,7 @@ export const ShimmerButton: React.FC<ShimmerButtonProps> = ({
       {text}
 
       {/* Floating shapes */}
-      {!disabled && (
+      {!false && (
         <>
           <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
             {/* Square 1 */}

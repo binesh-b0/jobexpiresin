@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server';
 const GEMINI_API_URL = process.env.GEMINI_API_URL;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const JOB_PROMPT_STRUCTURE = process.env.JOB_PROMPT_STRUCTURE;
-// const JOB_PROMPT_JSON_FORMAT = process.env.JOB_PROMPT_JSON_FORMAT;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -25,7 +24,7 @@ export async function GET(request: Request) {
           {
             parts: [
               {
-                text: `${JOB_PROMPT_STRUCTURE} "${jobTitle}" in JSON format with the following structure:
+                text: `${JOB_PROMPT_STRUCTURE} "${jobTitle}" in **valid JSON format** with the following structure:
                 {
                   "title": "string",
                   "similarJobs": ["string", "string", "string"],
@@ -33,7 +32,7 @@ export async function GET(request: Request) {
                   "replacedIn": "string",
                   "reason": ["string", "string", "string"]
                 }. 
-                Include the job title, similar jobs, key responsibilities, replacement timeframe, and reasons for replacement.`
+                Only output JSON. No explanations, no formatting.`
               }
             ]
           }
@@ -60,10 +59,19 @@ export async function GET(request: Request) {
     // Remove the code block formatting (```json ... ```)
     generatedText = generatedText.replace(/```json|```/g, '').trim();
 
-    // Attempt to parse the response directly as JSON
+    // Use regex to extract only the JSON part from the response
+    const jsonMatch = generatedText.match(/{[\s\S]*}/);
+
+    if (!jsonMatch) {
+      throw new Error('Failed to extract valid JSON from the response');
+    }
+
+    const jsonText = jsonMatch[0];
+
+    // Attempt to parse the extracted JSON
     let parsedResponse;
     try {
-      parsedResponse = JSON.parse(generatedText); // Assuming the content is now valid JSON
+      parsedResponse = JSON.parse(jsonText);
     } catch (e) {
       console.error('Error parsing generated content:', e);
       throw new Error('Failed to parse JSON from generated text');

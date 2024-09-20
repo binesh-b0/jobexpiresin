@@ -24,7 +24,7 @@ export async function GET(request: Request) {
           {
             parts: [
               {
-                text: `${JOB_PROMPT_STRUCTURE} "${jobTitle}" in **valid JSON format** with the following structure:
+                text: `${JOB_PROMPT_STRUCTURE} "${jobTitle}"~ in **valid JSON format** with the following structure:
                 {
                   "title": "string",
                   "similarJobs": ["string", "string", "string"],

@@ -44,6 +44,7 @@ export default function JobSearch({
       <input
         type="text"
         value={jobTitle}
+        maxLength={85}
         onChange={(e) => {
           setJobTitle(e.target.value);
           setError(false); // Reset error on input change

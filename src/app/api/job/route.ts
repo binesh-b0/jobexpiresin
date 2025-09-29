@@ -2,7 +2,28 @@ import { NextResponse } from 'next/server';
 
 const GEMINI_API_URL = process.env.GEMINI_API_URL;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-1.5-flash';
 const JOB_PROMPT_STRUCTURE = process.env.JOB_PROMPT_STRUCTURE;
+
+function resolveGeminiEndpoint() {
+  const defaultUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+
+  if (!GEMINI_API_URL) {
+    return defaultUrl;
+  }
+
+  const trimmedUrl = GEMINI_API_URL.replace(/\/+$/, '');
+
+  if (trimmedUrl.includes(':generateContent')) {
+    return trimmedUrl;
+  }
+
+  if (trimmedUrl.includes('/models/')) {
+    return `${trimmedUrl}:generateContent`;
+  }
+
+  return `${trimmedUrl}/models/${GEMINI_MODEL}:generateContent`;
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -12,9 +33,18 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Job title is required.' }, { status: 400 });
   }
 
+  if (!GEMINI_API_KEY) {
+    console.error('GEMINI_API_KEY is not configured.');
+    return NextResponse.json({ error: 'Gemini API key is not configured.' }, { status: 500 });
+  }
+
   try {
+    const geminiEndpoint = resolveGeminiEndpoint();
+    const requestUrl = new URL(geminiEndpoint);
+    requestUrl.searchParams.set('key', GEMINI_API_KEY);
+
     // Call the Gemini API with the job title
-    const geminiResponse = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+    const geminiResponse = await fetch(requestUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,11 +70,13 @@ export async function GET(request: Request) {
       }),
     });
 
-    if (!geminiResponse.ok) {
-      throw new Error(`Gemini API error: ${geminiResponse.statusText}`);
-    }
-
     const responseData = await geminiResponse.json();
+
+    if (!geminiResponse.ok) {
+      const errorMessage =
+        responseData?.error?.message || `Gemini API error: ${geminiResponse.statusText}`;
+      throw new Error(errorMessage);
+    }
 
     // Log the full response to check what is being returned
     console.log('Full Gemini API Response:', JSON.stringify(responseData, null, 2));
